@@ -10,6 +10,7 @@
             <v-card-title class="info--text">Edit Drink</v-card-title>
           </v-flex>
         </v-layout>
+        <!-- edit content -->
         <v-divider></v-divider>
         <v-layout row wrap class="mb-2">
           <v-flex xs12>
@@ -20,7 +21,7 @@
           </v-flex>
           <v-flex xs12>
             <v-card-text>
-              <v-select :items="items" v-model="editedIngredients" label="Ingredients" multiple required></v-select>
+              <v-select :items="ingredients" v-model="editedIngredients" label="Ingredients" multiple required></v-select>
             </v-card-text>
           </v-flex>
           <v-flex xs6 v-for="ing in editedIngredients" :key="ing.text">
@@ -55,34 +56,6 @@
         editDialog: false,
         editedTitle: this.drink.title,
         editedDescription: this.drink.description,
-        items: [{
-            text: "lemon"
-          },
-          {
-            text: "lime"
-          },
-          {
-            text: "grapefruit"
-          },
-          {
-            text: "kiwi"
-          },
-          {
-            text: "berry"
-          },
-          {
-            text: "strawberry"
-          },
-          {
-            text: "orange juice"
-          },
-          {
-            text: "grape juice"
-          },
-          {
-            text: "grapefruit juice"
-          }
-        ],
       }
     },
     methods: {
@@ -98,7 +71,11 @@
           ingredients: this.editedIngredients
         })
       }
+    },
+    computed: {
+      ingredients(){
+        return this.$store.getters.ingredients
+      }
     }
   }
-
 </script>

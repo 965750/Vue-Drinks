@@ -36,7 +36,6 @@ export default new Router({
       path: '/drinks',
       name: 'drinks',
       component: drinks,
-      beforeEnter: AuthGuard
     },
     {
       path: '/drink/:id',

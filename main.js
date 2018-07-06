@@ -8,7 +8,9 @@ import 'vuetify/dist/vuetify.min.css'
 import {
   store
 } from './store'
-import firebase from 'firebase'
+import firebase from 'firebase/app'
+// import 'firebase/auth'
+// import 'firebase/database'
 import DateFilter from './filters/date'
 import LongText from './filters/longText'
 import FavoritesDialog from './components/favorites/FavoritesDialog'
@@ -31,12 +33,12 @@ new Vue({
   template: '<App/>',
   created() {
     var config = {
-      apiKey: "___",
+      apiKey: "AIzaSyCBStUfqB518ErWRiPyct2u6jHE3Vovqvg",
       authDomain: "drinks-dea37.firebaseapp.com",
       databaseURL: "https://drinks-dea37.firebaseio.com",
       projectId: "drinks-dea37",
       storageBucket: "drinks-dea37.appspot.com",
-      messagingSenderId: "___"
+      messagingSenderId: "1085778192627"
     }
 
     const firebaseApp = firebase.initializeApp(config)

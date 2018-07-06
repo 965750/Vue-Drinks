@@ -1,4 +1,7 @@
-import * as firebase from 'firebase/app'
+import firebase from 'firebase/app'
+import 'firebase/auth'
+import 'firebase/database'
+import 'firebase/storage'
 
 export default ({
   state: {
@@ -171,7 +174,7 @@ export default ({
       })
     },
     newdrinks(state, getters) {
-      return getters.loadedDrinks.slice(0, 3)
+      return getters.loadedDrinks
     },
     loadedDrink(state) {
       return (drinkId) => {

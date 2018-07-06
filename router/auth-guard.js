@@ -1,3 +1,5 @@
+// if user != logged
+
 import { store } from '../store'
 
 export default (to, from, next) => {

@@ -9,6 +9,7 @@
             <v-flex xs12>
                 <v-card>
                     <v-container>
+                        <!-- header of card -->
                         <v-layout row wrap>
                             <v-flex xs12> 
                                 <v-card-media :src="drink.imageUrl"
@@ -29,6 +30,7 @@
                             </v-flex>
                         </v-layout>
                         <v-divider></v-divider>
+                        <!-- card content -->
                         <v-layout row wrap>
                             <v-flex xs12 sm3>
                                 <v-card-title class="body-1">
@@ -45,12 +47,16 @@
                             </v-flex>
                         </v-layout>
                         <v-layout>
-                            <v-flex xs12>
+                            <v-spacer></v-spacer>
+                            <v-flex>
                                 <v-card-actions>
-                                    <div class="info--text mt-3">{{drink.date | date}}</div>
-                                    <v-spacer></v-spacer>
                                     <app-favorites-dialog v-if="userIsAuth && !userIsCreator" :drinkId="drink.id"></app-favorites-dialog>
                                 </v-card-actions>
+                            </v-flex>
+                        </v-layout>
+                        <v-layout wrap row>
+                            <v-flex xs12>
+                                <div class="info--text mt-3">{{drink.date | date}}</div>
                             </v-flex>
                         </v-layout>
                     </v-container>

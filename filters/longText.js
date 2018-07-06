@@ -1,3 +1,5 @@
+// text limit
+
 export default (value) => {
     if(window.innerWidth > 1000){
         return value.slice(0, 170) + '...'

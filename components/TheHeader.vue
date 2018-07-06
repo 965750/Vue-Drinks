@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- mobile header -->
     <v-navigation-drawer v-model="sideNav" absolute temporary>
       <v-list class="pt-0">
         <v-list-tile class="green accent-4">
@@ -25,12 +26,14 @@
         </v-list-tile>
       </v-list>
     </v-navigation-drawer>
+    <!-- desktop header -->
     <v-toolbar class="green accent-4">
       <v-toolbar-side-icon @click="sideNav = !sideNav" class="hidden-sm-and-up"></v-toolbar-side-icon>
       <v-toolbar-title>
         <router-link to="/" tag="span" style="cursor: pointer">DevDrinks</router-link>
       </v-toolbar-title>
       <v-spacer></v-spacer>
+      <!-- menu -->
       <v-toolbar-items class="hidden-xs-only">
         <v-btn flat v-for="item in menuItems" :key="item.title" router :to="item.link">
           <v-icon class="pr-1">{{item.icon}}</v-icon>
@@ -66,6 +69,7 @@ export default {
   computed: {
     menuItems () {
       let menuItems = [
+        {icon: 'supervisor_account', title: 'View drinks', link: '/drinks'},
         {icon: 'create', title: 'Sign Up', link: '/signup'},
         {icon: 'lock_open', title: 'Sign In', link: '/signin'}
       ]
@@ -83,8 +87,3 @@ export default {
   }
 }
 </script>
-<style>
-.color{
-    color: rgb(94, 255, 161);
-}
-</style>

@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import * as firebase from 'firebase/app'
+
 import drink from './drink'
 import user from './user'
 import shared from './shared'

@@ -10,6 +10,7 @@
                 <v-card>
                     <v-card-text>
                         <v-container>
+                          <!-- form inputs -->
                             <form @submit.prevent="onSignin">
                                 <v-layout row>
                                     <v-flex xs12>

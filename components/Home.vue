@@ -1,5 +1,6 @@
 <template>
     <v-container fluid class="px-0 pt-0">
+      <!-- carousel -->
         <v-layout row v-if="loading">
             <v-flex xs12 class="text-xs-center">
                 <v-progress-circular class="mt-4" indeterminate color="green" :width="9" :size="70"></v-progress-circular>
@@ -7,11 +8,12 @@
         </v-layout>
         <v-layout row justify-center v-if="!loading">
             <v-flex xs12>
-                <v-carousel interval="3000" hide-delimiters>
+                <v-carousel interval="2300" hide-delimiters>
                     <v-carousel-item router :to="'/drink/' + item.id" v-for="item in drinks" :src="item.imageUrl" :key="item.title"></v-carousel-item>
                 </v-carousel>
             </v-flex>
         </v-layout>
+        <!-- info cards -->
         <v-layout row wrap>
             <v-flex xs12 sm6 md4>
                 <InfoCard
@@ -57,21 +59,21 @@ export default {
   max-width: 100%;
 }
 .carousel {
-  height: 360px;
+  height: 360px !important;
 }
 @media screen and (max-width: 1000px) {
   .carousel {
-    height: 270px;
+    height: 270px !important;
   }
 }
 @media screen and (max-width: 600px) {
   .carousel {
-    height: 180px;
+    height: 180px !important;
   }
 }
 @media screen and (max-width: 480px) {
   .carousel {
-    height: 150px;
+    height: 150px !important;
   }
 }
 </style>

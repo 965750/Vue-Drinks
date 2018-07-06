@@ -5,6 +5,7 @@
         <h2>Create a new Drink</h2>
       </v-flex>
     </v-layout>
+    <!-- create content -->
     <v-layout row>
       <v-flex xs12>
         <form @submit.prevent="onCreateDrink">
@@ -127,8 +128,3 @@
     }
   }
 </script>
-
-<style>
-
-
-</style>

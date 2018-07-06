@@ -1,5 +1,6 @@
 <template>
     <v-container>
+        <!-- single card -->
         <v-layout row wrap class="mb-2" v-for="drink in drinks" :key="drink.id">
             <v-flex xs12 sm10 md10 offset-md1 offset-sm1>
                 <v-card class="info">
