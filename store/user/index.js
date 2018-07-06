@@ -20,6 +20,7 @@ export default({
       state.user.fbKeys[id] = payload.fbKey
     },
     removeFavFromUser (state, payload) {
+
       const favDrinks = state.user.favDrinks
       favDrinks.splice(favDrinks.findIndex(drink => drink.id === payload), 1)
       Reflect.deleteProperty(state.user.fbKeys, payload )
