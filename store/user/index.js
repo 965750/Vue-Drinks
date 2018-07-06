@@ -19,8 +19,7 @@ export default({
       state.user.favDrinks.push(id)
       state.user.fbKeys[id] = payload.fbKey
     },
-    removeFavFromUser (state, payload) {
-
+    rmFavFromUser (state, payload) {
       const favDrinks = state.user.favDrinks
       favDrinks.splice(favDrinks.findIndex(drink => drink.id === payload), 1)
       Reflect.deleteProperty(state.user.fbKeys, payload )
@@ -52,7 +51,7 @@ export default({
       .remove()
       .then(() => {
         commit('setLoading', false)
-        commit('removeFavFromUser', payload)
+        commit('rmFavFromUser', payload)
       })
       .catch(error => {
         console.log(error)
