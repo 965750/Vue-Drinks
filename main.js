@@ -33,12 +33,12 @@ new Vue({
   template: '<App/>',
   created() {
     var config = {
-      apiKey: "AIzaSyCBStUfqB518ErWRiPyct2u6jHE3Vovqvg",
+      apiKey: "___",
       authDomain: "drinks-dea37.firebaseapp.com",
       databaseURL: "https://drinks-dea37.firebaseio.com",
       projectId: "drinks-dea37",
       storageBucket: "drinks-dea37.appspot.com",
-      messagingSenderId: "1085778192627"
+      messagingSenderId: "___"
     }
 
     const firebaseApp = firebase.initializeApp(config)
