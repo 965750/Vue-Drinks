@@ -4,22 +4,24 @@
     </v-alert>
 </template>
 <script>
+import { mapActions, mapGetters } from "vuex";
+
 export default {
-    props: ['text'],
-    data () {
-        return {
-            alert: null,
-        }
-    },
-    methods: {
-        onClose () {
-            this.$store.dispatch('clearError')
-        }
-    },
-    computed: {
-        error(){
-            return this.$store.getters.error
-        }
-    }
-}
+  props: ["text"],
+  data() {
+    return {
+      alert: null
+    };
+  },
+  methods: {
+    ...mapActions({
+      onClose: "A_CLEAR_ERROR"
+    })
+  },
+  computed: {
+    ...mapGetters({
+      error: "G_ERROR"
+    })
+  }
+};
 </script>

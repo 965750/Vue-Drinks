@@ -45,10 +45,10 @@ new Vue({
    
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        this.$store.dispatch('autoSignIn', user)
-        this.$store.dispatch('fetchUserData')
+        this.$store.dispatch('A_AUTO_SIGNIN', user)
+        this.$store.dispatch('A_FETCH_USER_DATA')
       }
-      this.$store.dispatch('loadDrinks')
+      this.$store.dispatch('A_LOAD_DRINKS')
     })
   }
 })

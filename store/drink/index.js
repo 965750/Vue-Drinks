@@ -6,43 +6,26 @@ import 'firebase/storage'
 export default ({
   state: {
     loadedDrinks: [],
-    ingredients: [{
-        text: "lemon"
-      },
-      {
-        text: "lime"
-      },
-      {
-        text: "grapefruit"
-      },
-      {
-        text: "kiwi"
-      },
-      {
-        text: "berry"
-      },
-      {
-        text: "strawberry"
-      },
-      {
-        text: "orange juice"
-      },
-      {
-        text: "grape juice"
-      },
-      {
-        text: "grapefruit juice"
-      }
+    ingredients: [
+        "lemon",
+        "lime",
+        "grapefruit",
+        "kiwi",
+        "berry",
+        "strawberry",
+        "orange juice",
+        "grape juice",
+        "grapefruit juice"
     ]
   },
   mutations: {
-    createDrink(state, payload) {
+    'M_CREATE_DRINK'(state, payload) {
       state.loadedDrinks.push(payload)
     },
-    setLoadedDrinks(state, payload) {
+    'M_SET_LOADED_DRINKS'(state, payload) {
       state.loadedDrinks = payload
     },
-    updateDrink(state, payload) {
+    'M_UPDATE_DRINK'(state, payload) {
       const drink = state.loadedDrinks.find(drink => {
         return drink.id === payload.id
       })
@@ -59,17 +42,12 @@ export default ({
         drink.ingredients = payload.ingredients
       }
     },
-    removeFavFromUser(state, payload) {
-      const favDrinks = state.user.favDrinks
-      favDrinks.splice(favDrinks.findIndex(drink => drink.id === payload), 1)
-      Reflect.deleteProperty(state.user.fbKeys, payload)
-    }
   },
   actions: {
-    updateDrinkData({
+    'A_UPDATE_DRINK_DATA'({
       commit
     }, payload) {
-      commit('setLoading', true)
+      commit('M_SET_LOADING', true)
       const updateObj = {}
       if (payload.title) {
         updateObj.title = payload.title
@@ -85,16 +63,16 @@ export default ({
       }
       firebase.database().ref('drinks').child(payload.id).update(updateObj)
         .then(() => {
-          commit('setLoading', false)
-          commit('updateDrink', payload)
+          commit('M_SET_LOADING', false)
+          commit('M_UPDATE_DRINK', payload)
         })
         .catch(error => {
           console.log(error)
-          commit('setLoading', false)
+          commit('M_SET_LOADING', false)
         })
     },
-    loadDrinks(context) {
-      context.commit('setLoading', true)
+    'A_LOAD_DRINKS'(context) {
+      context.commit('M_SET_LOADING', true)
       firebase.database().ref('drinks').once('value')
         .then((data) => {
           const drinks = []
@@ -111,15 +89,15 @@ export default ({
               creatorId: obj[key].creatorId
             })
           }
-          context.commit('setLoadedDrinks', drinks)
-          context.commit('setLoading', false)
+          context.commit('M_SET_LOADED_DRINKS', drinks)
+          context.commit('M_SET_LOADING', false)
         })
         .catch((error) => {
           console.log(error)
-          context.commit('setLoading', false)
+          context.commit('M_SET_LOADING', false)
         })
     },
-    createDrink({
+    'A_CREATE_DRINK'({
       commit,
       getters
     }, payload) {
@@ -129,7 +107,7 @@ export default ({
         description: payload.description,
         ingredients: payload.ingredients,
         date: payload.date.toISOString(),
-        creatorId: getters.user.id
+        creatorId: getters.G_USER.id
       }
       let imageUrl
       let key
@@ -153,7 +131,7 @@ export default ({
             })
         })
         .then(() => {
-          commit('createDrink', {
+          commit('M_CREATE_DRINK', {
             ...drink,
             imageUrl: imageUrl,
             id: key
@@ -165,18 +143,18 @@ export default ({
     }
   },
   getters: {
-    ingredients(state) {
+    'G_INGREDIENTS'(state) {
       return state.ingredients
     },
-    loadedDrinks(state) {
+    'G_LOADED_DRINKS'(state) {
       return state.loadedDrinks.sort((drinkA, drinkB) => {
         return drinkA.date > drinkB.date
       })
     },
-    newdrinks(state, getters) {
-      return getters.loadedDrinks
+    'G_NEW_DRINKS'(state, getters) {
+      return getters.G_LOADED_DRINKS
     },
-    loadedDrink(state) {
+    'G_LOADED_DRINK'(state) {
       return (drinkId) => {
         return state.loadedDrinks.find((drink) => {
           return drink.id == drinkId

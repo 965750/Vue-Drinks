@@ -51,6 +51,8 @@
   </div>
 </template>
 <script>
+import { mapActions } from "vuex";
+
 export default {
   data () {
     return {
@@ -58,13 +60,14 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      logout: 'A_LOGOUT',
+      themeChange: 'A_THEME_CHANGE'
+    }),
     onLogout () {
-      this.$store.dispatch('logout')
+      this.logout()
       this.$router.push('/')
     },
-    themeChange () {
-      this.$store.dispatch('themeChange')
-    }
   },
   computed: {
     menuItems () {
@@ -82,7 +85,7 @@ export default {
       return menuItems
     },
     userIsAuth () {
-      return this.$store.getters.user !== null && this.$store.getters.user !== undefined
+      return this.$store.getters.G_USER !== null && this.$store.getters.G_USER !== undefined
     }
   }
 }

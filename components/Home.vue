@@ -38,18 +38,18 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import InfoCard from './shared/InfoCard'
+
 export default {
   components: {
       InfoCard
   },
   computed: {
-    drinks() {
-      return this.$store.getters.newdrinks;
-    },
-    loading() {
-      return this.$store.getters.loading;
-    }
+    ...mapGetters({
+      drinks: 'G_NEW_DRINKS',
+      loading: 'G_LOADING'
+    })
   }
 }
 </script>
@@ -58,21 +58,21 @@ export default {
 .jumbotron__image {
   max-width: 100%;
 }
-.carousel {
+.v-carousel {
   height: 360px !important;
 }
 @media screen and (max-width: 1000px) {
-  .carousel {
+  .v-carousel {
     height: 270px !important;
   }
 }
 @media screen and (max-width: 600px) {
-  .carousel {
+  .v-carousel {
     height: 180px !important;
   }
 }
 @media screen and (max-width: 480px) {
-  .carousel {
+  .v-carousel {
     height: 150px !important;
   }
 }

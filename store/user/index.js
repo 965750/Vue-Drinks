@@ -8,10 +8,10 @@ export default({
     user: null,
   },
   mutations: {
-    setUser(state, payload) {
+    'M_SET_USER'(state, payload) {
       state.user = payload
     },
-    addFavForUser (state, payload) {
+    'M_ADD_FAV_FOR_USER'(state, payload) {
       const id = payload.id
       if (state.user.favDrinks.findIndex(drink => drink.id === id) >= 0) {
         return
@@ -19,30 +19,30 @@ export default({
       state.user.favDrinks.push(id)
       state.user.fbKeys[id] = payload.fbKey
     },
-    rmFavFromUser (state, payload) {
+    'M_REMOVE_FAV_FROM_USER'(state, payload) {
       const favDrinks = state.user.favDrinks
       favDrinks.splice(favDrinks.findIndex(drink => drink.id === payload), 1)
-      Reflect.deleteProperty(state.user.fbKeys, payload )
+      Reflect.deleteProperty(state.user.fbKeys, payload)
     }
   },
   actions: {
-    addFavForUser ({commit, getters}, payload) {
-      commit('setLoading', true)
-      const user = getters.user
+    'A_ADD_FAV_FOR_USER'({commit, getters}, payload) {
+      commit('M_SET_LOADING', true)
+      const user = getters.G_USER
       firebase.database().ref('/users/' + user.id).child('/favorite/')
       .push(payload)
       .then(data => {
-        commit('setLoading', false)
-        commit('addFavForUser', {id: payload, fbKey: data.key})
+        commit('M_SET_LOADING', false)
+        commit('M_ADD_FAV_FOR_USER', {id: payload, fbKey: data.key})
       })
       .catch(error => {
         console.log(error)
-        commit('setLoading', false)
+        commit('M_SET_LOADING', false)
       })
     },
-    removeFavFromUser ({commit, getters}, payload) {
-      commit('setLoading', true)
-      const user = getters.user
+    'A_REMOVE_FAV_FROM_USER'({commit, getters}, payload) {
+      commit('M_SET_LOADING', true)
+      const user = getters.G_USER
       if (!user.fbKeys) {
         return
       }
@@ -50,24 +50,24 @@ export default({
       firebase.database().ref('/users/' + user.id + '/favorite').child(fbKey)
       .remove()
       .then(() => {
-        commit('setLoading', false)
-        commit('rmFavFromUser', payload)
+        commit('M_SET_LOADING', false)
+        commit('M_REMOVE_FAV_FROM_USER', payload)
       })
       .catch(error => {
         console.log(error)
-        commit('setLoading', false)
+        commit('M_SET_LOADING', false)
       })
     },
-    autoSignIn ({commit}, payload) {
-      commit('setUser', {
+    'A_AUTO_SIGNIN'({commit}, payload) {
+      commit('M_SET_USER', {
         id: payload.uid,
         favDrinks: [],
         fbKeys: {}
       })
     },
-    fetchUserData ({commit, getters}) {
-      commit('setLoading', true)
-      firebase.database().ref('/users/' + getters.user.id + '/favorite/').once('value')
+    'A_FETCH_USER_DATA'({commit, getters}) {
+      commit('M_SET_LOADING', true)
+      firebase.database().ref('/users/' + getters.G_USER.id + '/favorite/').once('value')
       .then(data => {
         const dataPairs = data.val()
         let favoriteDrinks = []
@@ -77,70 +77,70 @@ export default({
           swappedPairs[dataPairs[key]] = key
         }
         const updatedUser = {
-          id: getters.user.id,
+          id: getters.G_USER.id,
           favDrinks: favoriteDrinks,
           fbKeys: swappedPairs
         }
-        commit('setLoading', false)
-        commit('setUser', updatedUser)
+        commit('M_SET_LOADING', false)
+        commit('M_SET_USER', updatedUser)
       })
       .catch(error => {
         console.log(error)
-        commit('setLoading', false)
+        commit('M_SET_LOADING', false)
       })
     },
-    logout ({commit}) {
+    'A_LOGOUT'({commit}) {
       firebase.auth().signOut()
-      commit('setUser', null)
+      commit('M_SET_USER', null)
     },
-    signUserIn(context, payload) {
-      context.commit('setLoading', true)
+    'A_SIGN_USER_IN'(context, payload) {
+      context.commit('M_SET_LOADING', true)
       firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
         .then(
           user => {
-            context.commit('setLoading', false)
+            context.commit('M_SET_LOADING', false)
             const newUser = {
               id: user.user.uid,
               favDrinks: [],
               fbKeys: {}
             }
-            context.commit('setUser', newUser)
+            context.commit('M_SET_USER', newUser)
           }
         )
         .catch(
           error => {
-            context.commit('setLoading', false)
-            context.commit('setError', error)
+            context.commit('M_SET_LOADING', false)
+            context.commit('M_SET_ERROR', error)
           }
         )
     },
-    signUserUp({
+    'A_SIGN_USER_UP'({
       commit
     }, payload) {
-      commit('setLoading', true)
-      commit('clearError')
+      commit('M_SET_LOADING', true)
+      commit('M_CLEAR_ERROR')
       firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
         .then(
           user => {
-            commit('setLoading', false)
+            commit('M_SET_LOADING', false)
             const newUser = {
               id: user.user.uid,
               favDrinks: [],
               fbKeys: {}
             }
-            commit('setUser', newUser)
+            commit('M_SET_USER', newUser)
           }
         )
         .catch(
           error => {
-            commit('setLoading', false)
-            commit('setError', error)
+            commit('M_SET_LOADING', false)
+            commit('M_SET_ERROR', error)
           }
         )
     },
   },
   getters: {
-    user(state) {
+    'G_USER'(state) {
       return state.user
     }
   }

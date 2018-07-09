@@ -41,12 +41,14 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
   computed: {
-    drinks () {
-      return this.$store.getters.loadedDrinks
-    },
+    ...mapGetters({
+      drinks: "G_LOADED_DRINKS"
+    })
   }
-}
+};
 </script>
 

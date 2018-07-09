@@ -51,7 +51,9 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from "vuex";
 import AlertCmp from "../shared/Alert.vue";
+
 export default {
   components: {
     AlertCmp
@@ -63,31 +65,26 @@ export default {
       confirmPassword: ""
     };
   },
-  computed: {
-    user() {
-      return this.$store.getters.user;
-    },
-    error() {
-      return this.$store.getters.error;
-    },
-    loading() {
-      return this.$store.getters.loading;
+  methods: {
+    ...mapActions({
+      signIn: 'A_SIGN_USER_IN'
+    }),
+    onSignin() {
+      this.signIn({email: this.email, password: this.password})
     }
+  },
+  computed: {
+    ...mapGetters({
+      user: 'G_USER',
+      error: 'G_ERROR',
+      loading: 'G_LOADING'
+    })
   },
   watch: {
     user(value) {
       if (value !== null && value !== undefined) {
         this.$router.push("/");
       }
-    }
-  },
-  methods: {
-    onSignin() {
-      // Vuex
-      this.$store.dispatch("signUserIn", {
-        email: this.email,
-        password: this.password
-      });
     }
   }
 };

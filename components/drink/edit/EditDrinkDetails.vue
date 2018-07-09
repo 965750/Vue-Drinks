@@ -15,8 +15,8 @@
         <v-layout row wrap class="mb-2">
           <v-flex xs12>
             <v-card-text>
-              <v-text-field name="title" label="Title" id="title" v-model="editedTitle" required></v-text-field>
-              <v-text-field name="description" label="Description" id="description" multi-line rows="4" v-model="editedDescription" required></v-text-field>
+              <v-textarea name="title" label="Title" id="title" v-model="editedTitle" required></v-textarea>
+              <v-textarea name="description" label="Description" id="description" multi-line rows="4" v-model="editedDescription" required></v-textarea>
             </v-card-text>
           </v-flex>
           <v-flex xs12>
@@ -24,10 +24,10 @@
               <v-select :items="ingredients" v-model="editedIngredients" label="Ingredients" multiple required></v-select>
             </v-card-text>
           </v-flex>
-          <v-flex xs6 v-for="ing in editedIngredients" :key="ing.text">
+          <v-flex xs6 v-for="ing in editedIngredients" :key="ing">
             <v-card-text class="py-0">
               <div class="text-xs-center">
-                <v-chip color="green accent-4">{{ing.text}}</v-chip>
+                <v-chip color="green accent-4">{{ing}}</v-chip>
               </div>
             </v-card-text>
           </v-flex>
@@ -48,34 +48,43 @@
 </template>
 
 <script>
-  export default {
-    props: ['drink'],
-    data() {
-      return {
-        editedIngredients: this.drink.ingredients,
-        editDialog: false,
-        editedTitle: this.drink.title,
-        editedDescription: this.drink.description,
+import { mapActions, mapGetters } from "vuex";
+
+export default {
+  props: ["drink"],
+  data() {
+    return {
+      editedIngredients: this.drink.ingredients,
+      editDialog: false,
+      editedTitle: this.drink.title,
+      editedDescription: this.drink.description
+    };
+  },
+  methods: {
+    onSaveChanges() {
+      if (
+        this.editedTitle.trim() === "" ||
+        this.editedDescription.trim() === "" ||
+        this.editedIngredients.length <= 0
+      ) {
+        return;
       }
+      this.editDialog = false;
+      this.updateDrinkData({
+        id: this.drink.id,
+        title: this.editedTitle,
+        description: this.editedDescription,
+        ingredients: this.editedIngredients
+      });
     },
-    methods: {
-      onSaveChanges() {
-        if (this.editedTitle.trim() === '' || this.editedDescription.trim() === '' || this.editedIngredients.length <= 0 ) {
-          return
-        }
-        this.editDialog = false
-        this.$store.dispatch('updateDrinkData', {
-          id: this.drink.id,
-          title: this.editedTitle,
-          description: this.editedDescription,
-          ingredients: this.editedIngredients
-        })
-      }
-    },
-    computed: {
-      ingredients(){
-        return this.$store.getters.ingredients
-      }
-    }
+    ...mapActions({
+      updateDrinkData: "A_UPDATE_DRINK_DATA"
+    })
+  },
+  computed: {
+    ...mapGetters({
+      ingredients: "G_INGREDIENTS"
+    })
   }
+};
 </script>

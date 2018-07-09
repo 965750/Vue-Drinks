@@ -1,6 +1,6 @@
 <template>
     <v-dialog persistent v-model="favoriteDialog" width="320px">
-        <v-btn accent slot="activator" class="light-green accent-3">
+        <v-btn accent slot="activator" class="light-green accent-3" style="color: #388E3C">
             {{userIsRegistered ? 'Remove from Favorites' : 'Add to Favorites'}}
         </v-btn>
         <v-card>
@@ -32,28 +32,36 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
+
 export default {
-    props: ['drinkId'],
-    data () {
-        return {
-            favoriteDialog: false
-        }
-    },
-    computed: {
-        userIsRegistered () {
-            return this.$store.getters.user.favDrinks.findIndex(drinkId => {
-                return drinkId === this.drinkId
-            }) >= 0
-        }
-    },
-    methods: {
-        onAgree () {
-            if (this.userIsRegistered) {
-                this.$store.dispatch('removeFavFromUser', this.drinkId)
-            } else {
-                this.$store.dispatch('addFavForUser', this.drinkId)
-            }
-        }
+  props: ["drinkId"],
+  data() {
+    return {
+      favoriteDialog: false
+    };
+  },
+  methods: {
+    ...mapActions({
+      removeFavFromUser: "A_REMOVE_FAV_FROM_USER",
+      addFavForUser: "A_ADD_FAV_FOR_USER"
+    }),
+    onAgree() {
+      if (this.userIsRegistered) {
+        this.removeFavFromUser(this.drinkId);
+      } else {
+        this.addFavForUser(this.drinkId);
+      }
     }
-}
+  },
+  computed: {
+    userIsRegistered() {
+      return (
+        this.$store.getters.G_USER.favDrinks.findIndex(drinkId => {
+          return drinkId === this.drinkId;
+        }) >= 0
+      );
+    }
+  }
+};
 </script>

@@ -36,8 +36,8 @@
                                 <v-card-title class="body-1">
                                     <h3>Ingredients:</h3>
                                 </v-card-title>
-                                <div class="text-xs-center" v-for="ing in drink.ingredients" :key="ing.text">
-                                    <v-chip color="green accent-4">{{ing.text}}</v-chip>
+                                <div class="text-xs-center" v-for="ing in drink.ingredients" :key="ing">
+                                    <v-chip color="green accent-4">{{ing}}</v-chip>
                                 </div>
                             </v-flex>
                             <v-flex xs12 sm9>
@@ -66,32 +66,34 @@
     </v-container>
 </template>
 <script>
+import { mapActions, mapGetters } from "vuex";
 import AppEdit from "./edit/EditDrinkDetails";
+
 export default {
   components: {
     AppEdit
   },
   props: ["id"],
   computed: {
+    ...mapGetters({
+      loading: "G_LOADING"
+    }),
     drink() {
-      return this.$store.getters.loadedDrink(this.id)
+      return this.$store.getters.G_LOADED_DRINK(this.id);
     },
     userIsAuth() {
       return (
-        this.$store.getters.user !== null &&
-        this.$store.getters.user !== undefined
+        this.$store.getters.G_USER !== null &&
+        this.$store.getters.G_USER !== undefined
       );
     },
     userIsCreator() {
       if (!this.userIsAuth) {
-        return false
+        return false;
       }
-      return this.$store.getters.user.id === this.drink.creatorId
-    },
-    loading() {
-      return this.$store.getters.loading
+      return this.$store.getters.G_USER.id === this.drink.creatorId;
     }
   }
-}
+};
 </script>
 

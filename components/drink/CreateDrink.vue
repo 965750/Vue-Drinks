@@ -32,7 +32,7 @@
           </v-layout>
           <v-layout row>
             <v-flex xs12 sm6 offset-sm3>
-              <v-text-field name="description" label="Description" id="description" multi-line rows="4" v-model="description" required></v-text-field>
+              <v-textarea name="description" label="Description" id="description" multi-line rows="4" v-model="description" required></v-textarea>
             </v-flex>
           </v-layout>
           <v-layout>
@@ -44,9 +44,9 @@
               <v-flex xs12 sm6 offset-sm3>
                 <v-container>
                     <v-layout row wrap>
-                        <v-flex xs4 v-for="ing in ingredients" :key="ing.text">
+                        <v-flex xs4 v-for="ing in ingredients" :key="ing">
                             <div class="text-xs-center">
-                                <v-chip class="green accent-4">{{ing.text}}</v-chip>
+                                <v-chip class="green accent-4">{{ing}}</v-chip>
                             </div>
                         </v-flex>
                     </v-layout>
@@ -65,66 +65,71 @@
 </template>
 
 <script>
-  export default {
-    data() {
-      return {
-        ingredients: null,
-        title: "",
-        bar: "",
-        imageUrl: "",
-        description: "",
-        image: null
+import { mapActions, mapGetters } from "vuex";
+
+export default {
+  data() {
+    return {
+      ingredients: null,
+      title: "",
+      bar: "",
+      imageUrl: "",
+      description: "",
+      image: null
+    };
+  },
+  methods: {
+    ...mapActions({
+      createDrink: "A_CREATE_DRINK"
+    }),
+    onFilePicked(event) {
+      const files = event.target.files;
+      let filename = files[0].name;
+      if (filename.lastIndexOf(".") <= 0) {
+        return alert("Please add a valid file!");
+      }
+      const fileReader = new FileReader();
+      fileReader.addEventListener("load", () => {
+        this.imageUrl = fileReader.result;
+      });
+      fileReader.readAsDataURL(files[0]);
+      this.image = files[0];
+    },
+    onPickFile() {
+      this.$refs.fileInput.click();
+    },
+    onCreateDrink() {
+      if (!this.formIsValid) {
+        return;
+      }
+      if (!this.image) {
+        return;
+      }
+      const drinkData = {
+        title: this.title,
+        bar: this.bar,
+        image: this.image,
+        description: this.description,
+        ingredients: this.ingredients,
+        date: new Date()
       };
-    },
-    methods: {
-      onFilePicked(event) {
-        const files = event.target.files;
-        let filename = files[0].name;
-        if (filename.lastIndexOf(".") <= 0) {
-          return alert("Please add a valid file!");
-        }
-        const fileReader = new FileReader();
-        fileReader.addEventListener("load", () => {
-          this.imageUrl = fileReader.result;
-        });
-        fileReader.readAsDataURL(files[0]);
-        this.image = files[0];
-      },
-      onPickFile() {
-        this.$refs.fileInput.click();
-      },
-      onCreateDrink() {
-        if (!this.formIsValid) {
-          return;
-        }
-        if (!this.image) {
-          return;
-        }
-        const drinkData = {
-          title: this.title,
-          bar: this.bar,
-          image: this.image,
-          description: this.description,
-          ingredients: this.ingredients,
-          date: new Date()
-        };
-        this.$store.dispatch("createDrink", drinkData);
-        this.$router.push("/drinks");
-      }
-    },
-    computed: {
-      items() {
-          return this.$store.getters.ingredients
-      },
-      formIsValid() {
-        return (
-          this.title !== "" &&
-          this.bar !== "" &&
-          this.imageUrl !== "" &&
-          this.description !== "" &&
-          this.ingredients !== null
-        );
-      }
+      this.createDrink(drinkData);
+      this.$router.push("/drinks");
+    }
+  },
+  computed: {
+    ...mapGetters({
+      items: "G_INGREDIENTS"
+    }),
+    formIsValid() {
+      return (
+        this.title !== "" &&
+        this.bar !== "" &&
+        this.imageUrl !== "" &&
+        this.description !== "" &&
+        this.ingredients !== null
+      );
     }
   }
+};
 </script>

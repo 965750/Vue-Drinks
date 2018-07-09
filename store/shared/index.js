@@ -5,35 +5,35 @@ export default ({
     darkTheme: false
   },
   mutations: {
-    setLoading(state, payload) {
+    'M_SET_LOADING'(state, payload) {
       state.loading = payload
     },
-    setError(state, payload) {
+    'M_SET_ERROR'(state, payload) {
       state.error = payload
     },
-    clearError(state) {
+    'M_CLEAR_ERROR'(state) {
       state.error = null
     },
-    themeChange(state) {
+    'M_THEME_CHANGE'(state) {
       state.darkTheme = !state.darkTheme
     }
   },
   actions: {
-    clearError({commit}) {
-        commit('clearError')
+    'A_CLEAR_ERROR'({commit}) {
+        commit('M_CLEAR_ERROR')
     },
-    themeChange({commit}) {
-        commit('themeChange')
+    'A_THEME_CHANGE'({commit}) {
+        commit('M_THEME_CHANGE')
     }
   },
   getters: {
     darkTheme (state) {
       return state.darkTheme
     },
-    loading (state) {
+    'G_LOADING'(state) {
         return state.loading
     },
-    error (state) {
+    'G_ERROR'(state) {
         return state.error
     }
   }
